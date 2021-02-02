@@ -92,6 +92,7 @@ class AlipayCtl {
 
   async fetchAlipayQrcode(ctx) {
     const alipay = await Alipay.findOne();
+    console.log("gsgsgs");
     const alipayConfig = {
       /* 以下信息可以在https://openhome.alipay.com/platform/appManage.htm查到, 不过merchantPrivateKey需要您自己生成 */
 
@@ -147,6 +148,7 @@ class AlipayCtl {
     // sendMail(code, email, productName, levelName, price, orderId, date);
     //---code end----
     ctx.body = result.qr_code; // 支付宝返回的结果
+    console.log(result.qr_code, "result.qr_code");
     let count = 0;
     let timer = setInterval(async () => {
       const { paymentStatus } = await Order.findOne({
