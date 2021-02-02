@@ -1,0 +1,11 @@
+{
+  "name": "Coodo Pay",
+  "description": "为独立开发者和站长打造的会员支付解决方案",
+  "website": "https://github.com/troyeguo/coodo-pay",
+  "success_url": "/login",
+  "env": {
+    "MONGODB_URI": {
+      "description": "您的 Mongodb Altas 数据库链接"
+    }
+  }
+}
