@@ -8,11 +8,8 @@ const parameter = require("koa-parameter");
 const mongoose = require("mongoose");
 const helmet = require("koa-helmet");
 const logger = require("koa-logger");
-const morgan = require("koa-morgan");
-const fs = require("fs");
 const path = require("path");
 const cors = require("koa2-cors");
-const koaStatic = require("koa-static");
 const { connection } = require("./config");
 const { initData } = require("./utils/initUtil");
 const compress = require("koa-compress");
@@ -55,7 +52,6 @@ app.use(helmet());
 app.use(cors());
 app.use(logger());
 app.use(compress({ threshold: 2048 }));
-app.use(koaStatic(path.join(__dirname, "public")));
 app.use(async (ctx, next) => {
   const start = new Date();
   await next();
@@ -63,21 +59,6 @@ app.use(async (ctx, next) => {
   console.log(`${ctx.method} ${ctx.url} - ${ms}ms`);
 });
 
-if (ENV !== "production") {
-  // 开发环境 / 测试环境
-  app.use(morgan("dev"));
-} else {
-  // 线上环境
-  const logFileName = path.join(__dirname, "logs", "access.log");
-  const writeStream = fs.createWriteStream(logFileName, {
-    flags: "a",
-  });
-  app.use(
-    morgan("combined", {
-      stream: writeStream,
-    })
-  );
-}
 app.use(
   error({
     postFormat: (e, { stack, ...rest }) =>
