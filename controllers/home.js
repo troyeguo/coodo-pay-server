@@ -1,7 +1,6 @@
 const TodayData = require("../models/todayData");
 const HistoryData = require("../models/historyData");
 const Product = require("../models/product");
-const { smms } = require("../config");
 const fs = require("fs");
 const path = require("path");
 const FormData = require("form-data");
@@ -39,7 +38,7 @@ class HomeCtl {
     const { data } = await axios.post("https://sm.ms/api/v2/upload", formData, {
       headers: {
         ...formHeaders,
-        Authorization: smms,
+        Authorization: process.env.SMMS_TOKEN,
       },
     });
     if (!data.data) {

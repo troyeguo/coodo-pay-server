@@ -10,25 +10,23 @@ const helmet = require("koa-helmet");
 const logger = require("koa-logger");
 const path = require("path");
 const cors = require("koa2-cors");
-const { connection } = require("./config");
 const { initData } = require("./utils/initUtil");
 const compress = require("koa-compress");
-const config = require("./config");
-const port = process.env.PORT || config.port;
+require("dotenv").config();
+
+const port = process.env.PORT;
 const ENV = process.env.NODE_ENV;
-// const server = require("http").createServer(app.callback());
-// const io = require("socket.io")(server);
 
 mongoose.connect(
   ENV !== "production"
-    ? connection
+    ? process.env.MONGODB_ALTAS_DB
     : process.env.MONGODB_URI ||
         "mongodb://" +
-          config.mongoDB.host +
+          process.env.MONGODB_HOST +
           ":" +
-          config.mongoDB.port +
+          process.env.MONGODB_PORT +
           "/" +
-          config.mongoDB.database,
+          process.env.MONGODB_DATABASE,
   { useNewUrlParser: true },
   () => {
     console.log("连接成功");
