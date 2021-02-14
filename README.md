@@ -33,7 +33,7 @@
 
 ## Live Preview
 
-[Shopping page](https://pay.960960.xyz/#/product/1)
+[Shopping page](https://vip.960960.xyz/#/product/1)
 
 [Administration system](https://coodo.960960.xyz)
 
