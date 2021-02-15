@@ -18,7 +18,7 @@ const port = process.env.PORT;
 const ENV = process.env.NODE_ENV;
 
 mongoose.connect(
-  ENV !== "production"
+  ENV === "dev"
     ? process.env.MONGODB_ALTAS_DB
     : process.env.MONGODB_URI ||
         "mongodb://" +
