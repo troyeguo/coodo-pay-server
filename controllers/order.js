@@ -39,7 +39,7 @@ class OrderCtl {
       {
         activation: [...order.activation, { timestamp: new Date().getTime() }],
         token: utils.md5(
-          utils.md5(new Date().format("yyyy-MM-dd") + " " + user.secret)
+          utils.md5(new Date().format("yyyy-MM-dd") + " " + process.env.SECRET)
         ),
       }
     );
@@ -54,7 +54,7 @@ class OrderCtl {
       order = await Order.findOne({
         email: ctx.request.query.email,
         password: utils.md5(
-          utils.md5(ctx.request.query.password + user.secret)
+          utils.md5(ctx.request.query.password + process.env.SECRET)
         ),
       })
         .sort({ field: "asc", _id: -1 })

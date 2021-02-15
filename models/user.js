@@ -9,6 +9,6 @@ const userSchema = new Schema({
   date: { type: "string", required: true },
   answer1: { type: "string", required: true, select: false },
   answer2: { type: "string", required: true, select: false },
-  secret: { type: "string", require: true },
+  answer3: { type: "string", required: true, select: false },
 });
 module.exports = model("User", userSchema);

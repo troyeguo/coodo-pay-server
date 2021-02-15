@@ -18,30 +18,23 @@ const {
   fetchWechatPay,
   handlePaymentCheck,
 } = require("../controllers/payment");
-const User = require("../models/user");
-User.findOne({}, function (err, user) {
-  if (!err) {
-    const secret = user ? user.secret : "coodo-pay";
-    const auth = jwt({ secret });
 
-    router.get("/checkPayment", handlePaymentCheck);
+const auth = jwt({ secret: process.env.SECRET });
 
-    router.post("/alipay/callback", handleAlipayCallback);
-    router.post("/paypal/callback", handlePaypalCallback);
+router.get("/checkPayment", handlePaymentCheck);
 
-    router.post("/alipay/:id", auth, updateAlipay);
-    router.post("/wechatPay/:id", auth, updateWechat);
-    router.post("/paypal/:id", auth, updatePaypal);
+router.post("/alipay/callback", handleAlipayCallback);
+router.post("/paypal/callback", handlePaypalCallback);
 
-    router.get("/alipay", auth, fetchAlipay);
-    router.get("/wechatPay", auth, fetchWechatPay);
-    router.get("/paypal", fetchPaypal);
+router.post("/alipay/:id", auth, updateAlipay);
+router.post("/wechatPay/:id", auth, updateWechat);
+router.post("/paypal/:id", auth, updatePaypal);
 
-    router.post("/refund/alipay", auth, handleAliPayRefund);
-    router.post("/refund/paypal", auth, handlePaypalRefund);
-  } else {
-    throw err;
-  }
-});
+router.get("/alipay", auth, fetchAlipay);
+router.get("/wechatPay", auth, fetchWechatPay);
+router.get("/paypal", fetchPaypal);
+
+router.post("/refund/alipay", auth, handleAliPayRefund);
+router.post("/refund/paypal", auth, handlePaypalRefund);
 
 module.exports = router;

@@ -12,10 +12,12 @@ class UserCtl {
       email: { type: "string", required: true },
       answer1: { type: "string", required: true },
       answer2: { type: "string", required: true },
+      answer3: { type: "string", required: true },
     });
     const user = await User.findOne({
       answer1: ctx.request.body.answer1,
       answer2: ctx.request.body.answer2,
+      answer3: ctx.request.body.answer3,
     });
     if (!user) {
       ctx.throw(403, "安全问题验证错误");
@@ -26,7 +28,9 @@ class UserCtl {
     const newUser = await User.findByIdAndUpdate(
       user._id,
       {
-        password: utils.md5(utils.md5(ctx.request.body.password + user.secret)),
+        password: utils.md5(
+          utils.md5(ctx.request.body.password + process.env.SECRET)
+        ),
       },
       { new: true }
     );
@@ -36,10 +40,12 @@ class UserCtl {
     ctx.verifyParams({
       answer1: { type: "string", required: true },
       answer2: { type: "string", required: true },
+      answer3: { type: "string", required: true },
     });
     const user = await User.findOne({
       answer1: ctx.request.body.answer1,
       answer2: ctx.request.body.answer2,
+      answer3: ctx.request.body.answer3,
     });
     if (!user) {
       ctx.throw(403, "安全问题验证错误");
@@ -52,38 +58,36 @@ class UserCtl {
       password: { type: "string", required: true },
       answer1: { type: "string", required: true },
       answer2: { type: "string", required: true },
-      secret: { type: "string", required: true },
+      answer3: { type: "string", required: true },
     });
     let date = new Date();
     const user = await new User({
       ...ctx.request.body,
       password: utils.md5(
-        utils.md5(ctx.request.body.password + ctx.request.body.secret)
+        utils.md5(ctx.request.body.password + process.env.SECRET)
       ),
       date: date.format("yyyy-MM-dd"),
     }).save();
     const setting = await Setting.findOne();
     await Setting.updateOne(setting, { isFirst: "no" });
     ctx.body = user;
-    setTimeout(() => {
-      process.exit(1);
-    }, 500);
   }
   async loginUser(ctx) {
     ctx.verifyParams({
       email: { type: "string", required: true },
       password: { type: "string", required: true },
     });
-    const { secret } = await User.findOne();
     const user = await User.findOne({
       email: ctx.request.body.email.trim(),
-      password: utils.md5(utils.md5(ctx.request.body.password.trim() + secret)),
+      password: utils.md5(
+        utils.md5(ctx.request.body.password.trim() + process.env.SECRET)
+      ),
     });
     if (!user) {
       ctx.throw(403, "用户名或密码错误");
     }
     const { _id, email } = user;
-    const jwt = jsonwebtoken.sign({ _id, email }, user.secret, {
+    const jwt = jsonwebtoken.sign({ _id, email }, process.env.SECRET, {
       expiresIn: "1d",
     });
     ctx.body = jwt;
@@ -94,10 +98,12 @@ class UserCtl {
       password: { type: "string", required: false },
       answer1: { type: "string", required: true },
       answer2: { type: "string", required: true },
+      answer3: { type: "string", required: true },
     });
     let user = await User.findOne({
       answer1: ctx.request.body.answer1,
       answer2: ctx.request.body.answer2,
+      answer3: ctx.request.body.answer3,
     });
     if (!user) {
       ctx.throw(403, "安全问题验证错误");
@@ -115,7 +121,7 @@ class UserCtl {
         ctx.params.id,
         {
           password: utils.md5(
-            utils.md5(ctx.request.query.password + user.secret)
+            utils.md5(ctx.request.query.password + process.env.SECRET)
           ),
         },
         { new: true }

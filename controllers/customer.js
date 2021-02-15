@@ -50,7 +50,9 @@ class CustomerCtl {
     const newCustomer = await Customer.findByIdAndUpdate(
       customer._id,
       {
-        password: utils.md5(utils.md5(ctx.request.body.password + user.secret)),
+        password: utils.md5(
+          utils.md5(ctx.request.body.password + process.env.SECRET)
+        ),
       },
       { new: true }
     );
@@ -67,7 +69,9 @@ class CustomerCtl {
     const user = await User.findOne();
     if (
       ctx.request.body.token !==
-      utils.md5(utils.md5(new Date().format("yyyy-MM-dd") + " " + user.secret))
+      utils.md5(
+        utils.md5(new Date().format("yyyy-MM-dd") + " " + process.env.SECRET)
+      )
     ) {
       ctx.throw(403, "token出错");
     }
@@ -80,7 +84,9 @@ class CustomerCtl {
     let date = new Date();
     const customer = await new Customer({
       ...ctx.request.body,
-      password: utils.md5(utils.md5(ctx.request.body.password + user.secret)),
+      password: utils.md5(
+        utils.md5(ctx.request.body.password + process.env.SECRET)
+      ),
       date: date.format("yyyy-MM-dd"),
       year: date.getFullYear(),
       month: date.getMonth() + 1,
@@ -95,10 +101,11 @@ class CustomerCtl {
       email: { type: "string", required: true },
       password: { type: "string", required: true },
     });
-    const { secret } = await User.findOne();
     const customer = await Customer.findOne({
       email: ctx.request.body.email.trim(),
-      password: utils.md5(utils.md5(ctx.request.body.password.trim() + secret)),
+      password: utils.md5(
+        utils.md5(ctx.request.body.password.trim() + process.env.SECRET)
+      ),
     });
     if (!customer) {
       ctx.throw(403, "用户名或密码错误");
@@ -118,7 +125,9 @@ class CustomerCtl {
     const user = await User.findOne();
     if (
       ctx.request.body.token !==
-      utils.md5(utils.md5(new Date().format("yyyy-MM-dd") + " " + user.secret))
+      utils.md5(
+        utils.md5(new Date().format("yyyy-MM-dd") + " " + process.env.SECRET)
+      )
     ) {
       ctx.throw(403, "token出错");
     }
@@ -144,7 +153,9 @@ class CustomerCtl {
     const user = await User.findOne();
     if (
       ctx.request.body.token !==
-      utils.md5(utils.md5(new Date().format("yyyy-MM-dd") + " " + user.secret))
+      utils.md5(
+        utils.md5(new Date().format("yyyy-MM-dd") + " " + process.env.SECRET)
+      )
     ) {
       ctx.throw(403, "token出错");
     }
@@ -161,7 +172,7 @@ class CustomerCtl {
         ctx.params.id,
         {
           password: utils.md5(
-            utils.md5(ctx.request.query.password + user.secret)
+            utils.md5(ctx.request.query.password + process.env.SECRET)
           ),
         },
         { new: true }

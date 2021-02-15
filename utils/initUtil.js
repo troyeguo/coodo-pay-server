@@ -4,7 +4,6 @@ const Paypal = require("../models/paypal");
 const Email = require("../models/email");
 const Setting = require("../models/setting");
 const User = require("../models/user");
-const config = require("../config");
 
 class initUtil {
   async initData() {
@@ -12,13 +11,6 @@ class initUtil {
     //   console.log("delete success");
     // });
 
-    const user = await User.findOne();
-    //兼容之间的版本
-    if (user && !user.secret) {
-      if (config.secret) {
-        await User.updateOne({ email: user.email }, { secret: config.secret });
-      }
-    }
     const alipay = await Alipay.find();
     if (alipay.length === 0) {
       await Alipay({

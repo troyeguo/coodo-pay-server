@@ -47,7 +47,9 @@ const createOrder = async (ctx, next) => {
     month: date.getMonth() + 1,
     day: date.getDate(),
     week: date.getDay(),
-    password: utils.md5(utils.md5(ctx.request.body.password + user.secret)),
+    password: utils.md5(
+      utils.md5(ctx.request.body.password + process.env.SECRET)
+    ),
     paymentStatus: "未支付",
     noInvoice: "noInvoice",
   }).save();
