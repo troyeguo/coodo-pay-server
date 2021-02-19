@@ -46,9 +46,9 @@
   # 2. Rename the .env.example filename to .env and set your local variables
   mv .env.example .env
 
-  # 3. change the MONGODB_ALTAS_DB varible to your remote mongodb altas url
+  # 3. change the MONGODB_ALTAS_DB varible to your remote Mongodb Altas link
 
-  # 4. Start the server with the server
+  # 4. Start the server
   yarn dev
 
 ```
