@@ -2,13 +2,13 @@ const mongoose = require("mongoose");
 
 const { Schema, model } = mongoose;
 
-const disaccountSchema = new Schema({
+const discountSchema = new Schema({
   __v: { type: "number", select: false },
   time: { type: "string", required: true },
   code: { type: "string", required: true },
   number: { type: "number", required: true },
   activation: { type: "array", required: true },
-  disaccountType: { type: "string", required: true },
+  discountType: { type: "string", required: true },
   amountType: { type: "string", enum: ["price", "percentage"], required: true },
   year: { type: "number", required: true },
   month: { type: "number", required: true },
@@ -20,4 +20,4 @@ const disaccountSchema = new Schema({
   validUntil: { type: "number", required: true },
 });
 
-module.exports = model("Disaccount", disaccountSchema);
+module.exports = model("Discount", discountSchema);

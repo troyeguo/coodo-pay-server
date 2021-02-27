@@ -1,5 +1,5 @@
 const Order = require("../models/order");
-const Disaccount = require("../models/disaccount");
+const Discount = require("../models/discount");
 const User = require("../models/user");
 const utils = require("utility");
 
@@ -20,15 +20,15 @@ const createOrder = async (ctx, next) => {
   let code =
     Math.random().toString(36).substr(4, 8).toUpperCase() +
     Math.random().toString(36).substr(4, 6).toUpperCase();
-  if (ctx.request.body.disaccount !== "未使用") {
-    const disaccount = await Disaccount.findOne({
-      code: ctx.request.body.disaccount,
+  if (ctx.request.body.discount !== "未使用") {
+    const discount = await Discount.findOne({
+      code: ctx.request.body.discount,
     });
-    await Disaccount.updateOne(
-      { code: ctx.request.body.disaccount },
+    await Discount.updateOne(
+      { code: ctx.request.body.discount },
       {
         activation: [
-          ...disaccount.activation,
+          ...discount.activation,
           { timestamp: new Date().getTime() },
         ],
       }

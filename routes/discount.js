@@ -1,14 +1,14 @@
 const Router = require("koa-router");
 const jwt = require("koa-jwt");
-const router = new Router({ prefix: "/api/disaccount" });
+const router = new Router({ prefix: "/api/discount" });
 const {
-  fetchAllDisaccount,
-  queryDisaccount,
+  fetchAllDiscount,
+  queryDiscount,
   createOneTime,
   createReusable,
-  deleteDisaccount,
-  updateDisaccount,
-} = require("../controllers/disaccount");
+  deleteDiscount,
+  updateDiscount,
+} = require("../controllers/discount");
 
 const auth = jwt({ secret: process.env.SECRET });
 const db = new Map();
@@ -28,12 +28,12 @@ const ipBasedRatelimit = ratelimit({
   disableHeader: false,
 });
 
-router.get("/all", auth, fetchAllDisaccount);
+router.get("/all", auth, fetchAllDiscount);
 
-router.post("/query", ipBasedRatelimit, queryDisaccount);
+router.post("/query", ipBasedRatelimit, queryDiscount);
 
-router.post("/delete/:id", auth, deleteDisaccount);
-router.post("/update/:id", auth, updateDisaccount);
+router.post("/delete/:id", auth, deleteDiscount);
+router.post("/update/:id", auth, updateDiscount);
 router.post("/one_time", auth, createOneTime);
 router.post("/reusable", auth, createReusable);
 
