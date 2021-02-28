@@ -27,7 +27,7 @@
 - support for Alipay and Paypal.
 - email notification and order-query system
 - built-in customer management system
-- integration with Wechat and Telegram
+- integration with Telegram
 - marketing tool to boost your bussiness
 - 10 website themes adapted to all modern browsers and mobile devices
 

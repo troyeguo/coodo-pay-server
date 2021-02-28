@@ -67,12 +67,7 @@ class CustomerCtl {
       token: { type: "string", require: true },
     });
     const user = await User.findOne();
-    if (
-      ctx.request.body.token !==
-      utils.md5(
-        utils.md5(new Date().format("yyyy-MM-dd") + " " + process.env.SECRET)
-      )
-    ) {
+    if (ctx.request.body.token !== user.coodoToken) {
       ctx.throw(403, "token出错");
     }
     const oldCustomer = await Customer.findOne({
@@ -123,12 +118,7 @@ class CustomerCtl {
       ctx.throw(403, "用户不存在");
     }
     const user = await User.findOne();
-    if (
-      ctx.request.body.token !==
-      utils.md5(
-        utils.md5(new Date().format("yyyy-MM-dd") + " " + process.env.SECRET)
-      )
-    ) {
+    if (ctx.request.body.token !== user.coodoToken) {
       ctx.throw(403, "token出错");
     }
     customer = await Customer.findByIdAndUpdate(
@@ -151,12 +141,7 @@ class CustomerCtl {
       ctx.throw(403, "用户不存在");
     }
     const user = await User.findOne();
-    if (
-      ctx.request.body.token !==
-      utils.md5(
-        utils.md5(new Date().format("yyyy-MM-dd") + " " + process.env.SECRET)
-      )
-    ) {
+    if (ctx.request.body.token !== user.coodoToken) {
       ctx.throw(403, "token出错");
     }
     if (ctx.request.body.email) {

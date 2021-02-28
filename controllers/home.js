@@ -4,7 +4,7 @@ const Product = require("../models/product");
 const fs = require("fs");
 const path = require("path");
 const FormData = require("form-data");
-
+const User = require("../models/user");
 const axios = require("axios");
 class HomeCtl {
   async getTodayData(ctx) {
@@ -21,7 +21,7 @@ class HomeCtl {
   async upload(ctx) {
     const file = ctx.request.files.file;
     let formData = new FormData();
-
+    const { smmsKey } = await User.findOne();
     formData.append(
       "smfile",
       fs.createReadStream(
@@ -38,7 +38,7 @@ class HomeCtl {
     const { data } = await axios.post("https://sm.ms/api/v2/upload", formData, {
       headers: {
         ...formHeaders,
-        Authorization: process.env.SMMS_TOKEN,
+        Authorization: smmsKey || process.env.smmsKey,
       },
     });
     if (!data.data) {

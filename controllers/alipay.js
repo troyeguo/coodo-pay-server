@@ -1,13 +1,42 @@
 const Alipay = require("../models/alipay");
 const Order = require("../models/order");
 const Product = require("../models/product");
+const User = require("../models/user");
 const alipayf2f = require("alipay-ftof");
 const Customer = require("../models/customer");
 const axios = require("axios");
 const app = require("../app");
 const io = app.getSocketIo();
 const { sendOrderMail } = require("../utils/emailUtil");
+const TelegramBot = require("node-telegram-bot-api");
 const { handleLimit } = require("../service/handleLimit");
+const generate_bot_message = (
+  code,
+  email,
+  productName,
+  levelName,
+  price,
+  orderId,
+  date
+) => {
+  return (
+    "您有一笔新订单" +
+    "\n商品名称：" +
+    productName +
+    "\n等级名称：" +
+    levelName +
+    "\n价格：" +
+    price +
+    "\n日期：" +
+    date +
+    "\n订单号：" +
+    orderId +
+    "\n邮箱：" +
+    email +
+    "\n激活码：" +
+    code
+  );
+};
 class AlipayCtl {
   async updateAlipay(ctx) {
     ctx.verifyParams({
@@ -145,7 +174,29 @@ class AlipayCtl {
     //   noInvoice: result.out_trade_no,
     // });
     // const { code, email, productName, levelName, price, orderId, date } = order;
-    // sendMail(code, email, productName, levelName, price, orderId, date);
+    // const { telegramToken, telegramId } = await User.findOne();
+    // console.log(telegramToken, telegramId);
+    // const bot = new TelegramBot(telegramToken, { polling: true });
+
+    // if (telegramId && telegramToken) {
+    //   try {
+    //     bot.sendMessage(
+    //       telegramId,
+    //       generate_bot_message(
+    //         code,
+    //         email,
+    //         productName,
+    //         levelName,
+    //         price,
+    //         orderId,
+    //         date
+    //       )
+    //     );
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // }
+    // sendOrderMail(code, email, productName, levelName, price, orderId, date);
     //---code end----
     ctx.body = result.qr_code; // 支付宝返回的结果
     console.log(result.qr_code, "result.qr_code");
@@ -212,6 +263,8 @@ class AlipayCtl {
     });
     const { productId } = orderInfo;
     const { callbackUrl, productType } = await Product.findOne({ productId });
+    const { telegramToken, telegramId } = await User.findOne();
+    const bot = new TelegramBot(telegramToken, { polling: true });
     if (productType === 1) {
       await Order.updateOne(
         { noInvoice: ctx.request.body.out_trade_no },
@@ -231,6 +284,24 @@ class AlipayCtl {
         date,
       } = order;
       sendOrderMail(code, email, productName, levelName, price, orderId, date);
+      if (telegramId && telegramToken) {
+        try {
+          bot.sendMessage(
+            telegramId,
+            generate_bot_message(
+              code,
+              email,
+              productName,
+              levelName,
+              price,
+              orderId,
+              date
+            )
+          );
+        } catch (error) {
+          console.log(error);
+        }
+      }
       handleLimit(ctx.request.body.out_trade_no);
       ctx.body = "success";
     }
@@ -263,6 +334,24 @@ class AlipayCtl {
             orderId,
             date
           );
+          if (telegramId && telegramToken) {
+            try {
+              bot.sendMessage(
+                telegramId,
+                generate_bot_message(
+                  code,
+                  email,
+                  productName,
+                  levelName,
+                  price,
+                  orderId,
+                  date
+                )
+              );
+            } catch (error) {
+              console.log(error);
+            }
+          }
           handleLimit(orderId);
           ctx.body = "success";
         }
@@ -276,9 +365,6 @@ class AlipayCtl {
       });
     }
     if (productType === 3) {
-      const product = await Product.findOne({
-        productId: ctx.request.body.productId,
-      });
       await Order.updateOne(
         { orderId: ctx.request.body.orderId },
         { paymentStatus: "已支付" }
@@ -302,6 +388,24 @@ class AlipayCtl {
         date,
       } = order;
       sendOrderMail(code, email, productName, levelName, price, orderId, date);
+      if (telegramId && telegramToken) {
+        try {
+          bot.sendMessage(
+            telegramId,
+            generate_bot_message(
+              code,
+              email,
+              productName,
+              levelName,
+              price,
+              orderId,
+              date
+            )
+          );
+        } catch (error) {
+          console.log(error);
+        }
+      }
       handleLimit(orderId);
       ctx.body = "success";
     }

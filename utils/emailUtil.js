@@ -20,6 +20,10 @@ class emailUtil {
         user: mailAddress,
         // 这里密码不是qq密码，是你设置的smtp授权码
         pass: mailPassword,
+        type: "OAuth2",
+        clientId: emails.clientId,
+        clientSecret: emails.clientSecret,
+        refreshToken: emails.refreshToken,
       },
     });
     let mailOptions = {
@@ -63,6 +67,10 @@ class emailUtil {
         user: mailAddress,
         // 这里密码不是qq密码，是你设置的smtp授权码
         pass: mailPassword,
+        type: "OAuth2",
+        clientId: emails.clientId,
+        clientSecret: emails.clientSecret,
+        refreshToken: emails.refreshToken,
       },
     });
 

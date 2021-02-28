@@ -27,7 +27,7 @@ const settingSchema = new Schema({
   },
   defaultMail: {
     type: "string",
-    enum: ["qq", "163", " "],
+    enum: ["qq", "163", "gmail"],
     required: true,
   },
 });

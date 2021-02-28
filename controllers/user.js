@@ -1,6 +1,7 @@
 const User = require("../models/user");
 const Setting = require("../models/setting");
 const utils = require("utility");
+const { v4: uuidv4 } = require("uuid");
 const jsonwebtoken = require("jsonwebtoken");
 class UserCtl {
   async fetchUser(ctx) {
@@ -128,6 +129,38 @@ class UserCtl {
       );
     }
     ctx.body = user;
+  }
+  async createToken(ctx) {
+    const token = uuidv4();
+    await User.findOneAndUpdate({}, { coodoToken: token });
+    ctx.body = token;
+  }
+  async addSMMS(ctx) {
+    ctx.verifyParams({
+      smmsKey: { type: "string", required: true },
+    });
+    await User.findOneAndUpdate({}, { smmsKey: ctx.request.body.smmsKey });
+    ctx.body = ctx.request.body.smmsKey;
+  }
+  async addTelegramToken(ctx) {
+    ctx.verifyParams({
+      telegramToken: { type: "string", required: true },
+    });
+    await User.findOneAndUpdate(
+      {},
+      { telegramToken: ctx.request.body.telegramToken }
+    );
+    ctx.body = ctx.request.body.telegramToken;
+  }
+  async addTelegramId(ctx) {
+    ctx.verifyParams({
+      telegramId: { type: "string", required: true },
+    });
+    await User.findOneAndUpdate(
+      {},
+      { telegramId: ctx.request.body.telegramId }
+    );
+    ctx.body = ctx.request.body.telegramId;
   }
 }
 module.exports = new UserCtl();

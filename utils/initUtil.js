@@ -7,7 +7,7 @@ const User = require("../models/user");
 
 class initUtil {
   async initData() {
-    // await Setting.deleteMany({}, () => {
+    // await Email.deleteMany({}, () => {
     //   console.log("delete success");
     // });
 
@@ -43,15 +43,12 @@ class initUtil {
     if (email.length === 0) {
       await Email({
         mailName: "qq",
-        mailAddress: " ",
-        mailPassword: " ",
-        sendName: " ",
       }).save();
       await Email({
         mailName: "163",
-        mailAddress: " ",
-        mailPassword: " ",
-        sendName: " ",
+      }).save();
+      await Email({
+        mailName: "gmail",
       }).save();
     }
     const setting = await Setting.find();

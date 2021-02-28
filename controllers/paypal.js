@@ -9,7 +9,33 @@ const app = require("../app");
 const io = app.getSocketIo();
 const { sendOrderMail } = require("../utils/emailUtil");
 const { handleLimit } = require("../service/handleLimit");
-
+const generate_bot_message = (
+  code,
+  email,
+  productName,
+  levelName,
+  price,
+  orderId,
+  date
+) => {
+  return (
+    "您有一笔新订单" +
+    "\n商品名称：" +
+    productName +
+    "\n等级名称：" +
+    levelName +
+    "\n价格：" +
+    price +
+    "\n日期：" +
+    date +
+    "\n订单号：" +
+    orderId +
+    "\n邮箱：" +
+    email +
+    "\n激活码：" +
+    code
+  );
+};
 class PaypalCtl {
   async updatePaypal(ctx) {
     ctx.verifyParams({
@@ -124,6 +150,24 @@ class PaypalCtl {
         date,
       } = order;
       sendOrderMail(code, email, productName, levelName, price, orderId, date);
+      if (telegramId && telegramToken) {
+        try {
+          bot.sendMessage(
+            telegramId,
+            generate_bot_message(
+              code,
+              email,
+              productName,
+              levelName,
+              price,
+              orderId,
+              date
+            )
+          );
+        } catch (error) {
+          console.log(error);
+        }
+      }
       handleLimit(orderId);
       ctx.body = "success";
     }

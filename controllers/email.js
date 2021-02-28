@@ -11,10 +11,7 @@ class EmailCtl {
     const email = await Email.findByIdAndUpdate(
       ctx.params.id,
       {
-        mailName: ctx.request.body.mailName.trim(),
-        mailAddress: ctx.request.body.mailAddress.trim(),
-        mailPassword: ctx.request.body.mailPassword.trim(),
-        sendName: ctx.request.body.sendName.trim(),
+        ...ctx.request.body,
       },
       { new: true }
     );

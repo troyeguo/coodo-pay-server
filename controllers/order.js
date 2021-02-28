@@ -39,7 +39,7 @@ class OrderCtl {
       {
         activation: [...order.activation, { timestamp: new Date().getTime() }],
         token: utils.md5(
-          utils.md5(new Date().format("yyyy-MM-dd") + " " + process.env.SECRET)
+          utils.md5(new Date().format("yyyy-MM-dd") + " " + user.coodoToken)
         ),
       }
     );

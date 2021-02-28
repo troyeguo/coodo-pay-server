@@ -9,6 +9,10 @@ const {
   updateUser,
   forgetUser,
   verifyAnswer,
+  createToken,
+  addSMMS,
+  addTelegramId,
+  addTelegramToken,
 } = require("../controllers/user");
 const auth = jwt({ secret: process.env.SECRET });
 const db = new Map();
@@ -34,6 +38,10 @@ router.post("/verify", auth, verifyAnswer);
 
 router.post("/", createUser);
 router.post("/login", ipBasedRatelimit, loginUser);
+router.post("/token", ipBasedRatelimit, createToken);
+router.post("/smms", ipBasedRatelimit, addSMMS);
+router.post("/telegram_id", ipBasedRatelimit, addTelegramId);
+router.post("/telegram_token", ipBasedRatelimit, addTelegramToken);
 
 router.post("/forget", ipBasedRatelimit, forgetUser);
 

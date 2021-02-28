@@ -28,7 +28,7 @@ class SettingCtl {
       },
       defaultMail: {
         type: "string",
-        enum: ["qq", "163"],
+        enum: ["qq", "163", "gmail"],
         required: false,
       },
     });
