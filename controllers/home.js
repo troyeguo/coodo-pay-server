@@ -38,7 +38,7 @@ class HomeCtl {
     const { data } = await axios.post("https://sm.ms/api/v2/upload", formData, {
       headers: {
         ...formHeaders,
-        Authorization: smmsKey || process.env.smmsKey,
+        Authorization: smmsKey || process.env.SMMS_KEY,
       },
     });
     if (!data.data) {
